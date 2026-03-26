@@ -12,6 +12,16 @@ const routes: IRoute[] = [
     path: "auth/login",
     controller: controller.login,
   },
+  {
+    method: "post",
+    path: "auth/forgot-password",
+    controller: controller.forgotPassword,
+  },
+  {
+    method: "post",
+    path: "auth/reset-password",
+    controller: controller.resetPassword,
+  },
 ];
 
 export default routes;

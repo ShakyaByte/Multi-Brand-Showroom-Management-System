@@ -6,6 +6,7 @@ export const createSchema = Joi.object({
   password: Joi.string().min(6).required(),
   roleId: Joi.number().integer().required(),
   brandId: Joi.number().integer().optional().allow(null),
+  showroomId: Joi.number().integer().optional().allow(null),
 });
 
 export const updateSchema = Joi.object({
@@ -14,5 +15,7 @@ export const updateSchema = Joi.object({
   password: Joi.string().min(6).optional(),
   roleId: Joi.number().integer().optional(),
   brandId: Joi.number().integer().optional().allow(null),
+  showroomId: Joi.number().integer().optional().allow(null),
   isActive: Joi.boolean().optional(),
 });
+

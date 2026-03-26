@@ -5,6 +5,7 @@ class Resource {
     return {
       id: data.id,
       name: data.name,
+      permissions: data.permissions,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
     };

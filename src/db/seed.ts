@@ -6,11 +6,34 @@ import { hashPassword } from "../utils/helper";
 async function seed() {
   console.log("Seeding Database...");
 
-  // 1. Seed Roles
+  // 1. Seed Roles with permissions
   const roles = await db.insert(rolesSchema).values([
-    { name: "SUPER_ADMIN" },
-    { name: "BRAND_ADMIN" },
-    { name: "MANAGER" },
+    {
+      name: "SUPER_ADMIN",
+      permissions: [
+        "roles.create", "roles.read", "roles.update", "roles.delete",
+        "users.create", "users.read", "users.update", "users.delete",
+        "brands.create", "brands.read", "brands.update", "brands.delete",
+        "products.create", "products.read", "products.update", "products.delete",
+        "showrooms.create", "showrooms.read", "showrooms.update", "showrooms.delete",
+      ],
+    },
+    {
+      name: "BRAND_MANAGER",
+      permissions: [
+        "products.create", "products.read", "products.update", "products.delete",
+        "brands.read",
+        "showrooms.read",
+      ],
+    },
+    {
+      name: "SHOWROOM_MANAGER",
+      permissions: [
+        "showrooms.create", "showrooms.read", "showrooms.update",
+        "brands.read",
+        "products.read",
+      ],
+    },
   ])
   .onConflictDoNothing()
   .returning();
@@ -30,7 +53,7 @@ async function seed() {
     email: "admin@gmail.com",
     password: hashedPassword,
     roleId: superAdminRole!.id, // Link to SUPER_ADMIN role
-    // brandId is left null because Super Admin manages all brands
+    // brandId and showroomId are left null because Super Admin manages everything
   }).onConflictDoNothing();
 
   console.log("Seeding complete!");

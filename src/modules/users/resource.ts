@@ -8,6 +8,7 @@ class Resource {
       email: data.email,
       roleId: data.roleId,
       brandId: data.brandId,
+      showroomId: data.showroomId,
       isActive: data.isActive,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
@@ -19,3 +20,4 @@ class Resource {
 }
 
 export default Resource;
+

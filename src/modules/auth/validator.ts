@@ -12,3 +12,13 @@ export const registerSchema = Joi.object({
   roleId: Joi.number().integer().required(),
   brandId: Joi.number().integer().optional().allow(null),
 });
+
+export const forgotPasswordSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+
+export const resetPasswordSchema = Joi.object({
+  email: Joi.string().email().required(),  // ← add
+  otp: Joi.string().length(6).required(),  // ← change from token
+  newPassword: Joi.string().min(6).required(),
+});

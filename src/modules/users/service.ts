@@ -4,11 +4,17 @@ import { AppError } from "../../utils/appError";
 import { hashPassword } from "../../utils/helper";
 import { createSchema, updateSchema } from "./validator";
 import type { ICreateUser, IUserQueryParams } from "./interface";
+import RolesModel from "../roles/model";
 
 export const UsersService = {
   create: async (input: ICreateUser) => {
     const { value, error } = createSchema.validate(input, { abortEarly: false });
     if (error) throw error;
+
+    const role = await RolesModel.findById(value.roleId);
+    if (!role) {
+      throw new AppError("Invalid roleId: Role does not exist", 400);
+    }
 
     const existing = await Model.findByEmail(value.email);
     if (existing) {

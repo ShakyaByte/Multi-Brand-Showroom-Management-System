@@ -10,6 +10,11 @@ const env: any = {
   API_KEY: process.env.API_KEY,
   DATABASE_URL: process.env.DATABASE_URL,
   TIMEZONE: "Asia/Kathmandu",
+  SMTP_HOST: process.env.SMTP_HOST ,
+  SMTP_PORT: process.env.SMTP_PORT ,
+  SMTP_USER: process.env.SMTP_USER ,
+  SMTP_PASS: process.env.SMTP_PASS ,
+  SMTP_FROM: process.env.SMTP_FROM ,
 };
 
 export default env;

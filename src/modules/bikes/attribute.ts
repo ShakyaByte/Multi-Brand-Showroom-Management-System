@@ -1,4 +1,5 @@
 import { serial, text, integer, real, json, timestamp } from "drizzle-orm/pg-core";
+import brandsSchema from "../brands/schema";
 
 export const tableName = "bikes";
 
@@ -7,7 +8,8 @@ export const attributes = {
   name: text("name").notNull(),
   price: real("price").notNull(),
   specs: json("specs"),               // JSON field for flexible specifications
-  brandId: integer("brand_id").notNull(), // FK -> brands.id
+  brandId: integer("brand_id").notNull().references(() => brandsSchema.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 };
+

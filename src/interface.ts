@@ -6,6 +6,7 @@ export interface IRoute {
   controller: (req: Request, res: Response, next: NextFunction) => Promise<any>;
   authorization?: boolean;
   authCheckType?: string[];
+  permissions?: string[];
 }
 
 export interface IParams {

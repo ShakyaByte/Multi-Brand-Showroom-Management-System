@@ -33,13 +33,13 @@ const routesInit = (app: Express) => {
 
   // Register all module routes
   routes.forEach((route) => {
-    const { method, path, controller, authorization, authCheckType } = route;
+    const { method, path, controller, authorization, authCheckType, permissions } = route;
 
     const middlewares: any[] = [];
 
     // Add authentication middleware if route requires authorization
     if (authorization) {
-      middlewares.push(checkAuthentication(authCheckType));
+      middlewares.push(checkAuthentication(authCheckType, permissions));
     }
 
     app[method](`/api/${path}`, ...middlewares, controller);
@@ -50,3 +50,4 @@ const routesInit = (app: Express) => {
 };
 
 export default routesInit;
+

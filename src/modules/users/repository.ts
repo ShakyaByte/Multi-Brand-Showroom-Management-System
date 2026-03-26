@@ -6,6 +6,7 @@ const selectQuery = {
   email: usersSchema.email,
   roleId: usersSchema.roleId,
   brandId: usersSchema.brandId,
+  showroomId: usersSchema.showroomId,
   isActive: usersSchema.isActive,
   createdAt: usersSchema.createdAt,
   updatedAt: usersSchema.updatedAt,

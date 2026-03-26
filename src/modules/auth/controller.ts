@@ -18,4 +18,20 @@ export const controller = {
       next(error);
     }
   },
+  forgotPassword: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = await AuthService.forgotPassword(req.body);
+      res.json({ success: true, message: data.message, data });
+    } catch (error) {
+      next(error);
+    }
+  },
+  resetPassword: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = await AuthService.resetPassword(req.body);
+      res.json({ success: true, message: data.message, data });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
