@@ -9,7 +9,7 @@ class Model {
     return result;
   }
 
-  static async findAllAndCount(params: any) {
+  static async findAllAndCount(params: any, user: any) {
     const { search, page = 1, limit = 10, brandId } = params;
     const offset = (page - 1) * limit;
 
@@ -22,7 +22,15 @@ class Model {
         )
       );
     }
-    if (brandId) {
+
+    // ABAC: Hierarchy-based filtering
+    if (user.role === "BRAND_MANAGER" && user.brandId) {
+      conditions.push(eq(usersSchema.brandId, Number(user.brandId)));
+    } else if (user.role === "SHOWROOM_MANAGER" && user.showroomId) {
+      // Showroom managers can only see users in their showroom
+      conditions.push(eq(usersSchema.showroomId, Number(user.showroomId)));
+    } else if (brandId) {
+      // For SUPER_ADMIN allowing search by brandId from params
       conditions.push(eq(usersSchema.brandId, Number(brandId)));
     }
 
@@ -49,11 +57,22 @@ class Model {
     };
   }
 
-  static async findById(id: number) {
+  static async findById(id: number, user?: any) {
+    const conditions = [eq(usersSchema.id, id)];
+
+    // ABAC: Ensure user only finds authorized users
+    if (user) {
+      if (user.role === "BRAND_MANAGER" && user.brandId) {
+        conditions.push(eq(usersSchema.brandId, Number(user.brandId)));
+      } else if (user.role === "SHOWROOM_MANAGER" && user.showroomId) {
+        conditions.push(eq(usersSchema.showroomId, Number(user.showroomId)));
+      }
+    }
+
     const [result] = await db
       .select(Repository.selectQuery)
       .from(usersSchema)
-      .where(eq(usersSchema.id, id));
+      .where(and(...conditions));
     return result;
   }
 

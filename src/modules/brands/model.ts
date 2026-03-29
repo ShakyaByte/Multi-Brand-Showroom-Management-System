@@ -9,13 +9,18 @@ class Model {
     return result;
   }
 
-  static async findAllAndCount(params: any) {
+  static async findAllAndCount(params: any, user: any) {
     const { search, page = 1, limit = 10 } = params;
     const offset = (page - 1) * limit;
 
     const conditions: any[] = [];
     if (search) {
       conditions.push(ilike(brandsSchema.name, `%${search}%`));
+    }
+
+    // ABAC: If user is not SUPER_ADMIN, they can only see their own brand
+    if (user.role !== "SUPER_ADMIN" && user.brandId) {
+      conditions.push(eq(brandsSchema.id, Number(user.brandId)));
     }
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
@@ -41,11 +46,18 @@ class Model {
     };
   }
 
-  static async findById(id: number) {
+  static async findById(id: number, user?: any) {
+    const conditions = [eq(brandsSchema.id, id)];
+
+    // ABAC: If user is not SUPER_ADMIN, they can only access their own brand
+    if (user && user.role !== "SUPER_ADMIN" && user.brandId) {
+      conditions.push(eq(brandsSchema.id, Number(user.brandId)));
+    }
+
     const [result] = await db
       .select(Repository.selectQuery)
       .from(brandsSchema)
-      .where(eq(brandsSchema.id, id));
+      .where(and(...conditions));
     return result;
   }
 

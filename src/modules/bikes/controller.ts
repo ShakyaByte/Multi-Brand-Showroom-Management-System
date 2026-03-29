@@ -4,7 +4,7 @@ import { BikesService } from "./service";
 export const controller = {
   create: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = await BikesService.create(req.body);
+      const data = await BikesService.create(req.body, (req as any).user);
       res.status(201).json({ success: true, message: "Created successfully", data });
     } catch (error) {
       next(error);
@@ -12,7 +12,7 @@ export const controller = {
   },
   list: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = await BikesService.list(req.query as any);
+      const data = await BikesService.list(req.query as any, (req as any).user);
       res.json({ success: true, data });
     } catch (error) {
       next(error);
@@ -25,7 +25,7 @@ export const controller = {
         res.status(400).json({ success: false, message: "ID is required" });
         return;
       }
-      const data = await BikesService.find(id as string);
+      const data = await BikesService.find(id as string, (req as any).user);
       res.json({ success: true, data });
     } catch (error) {
       next(error);
@@ -38,7 +38,7 @@ export const controller = {
         res.status(400).json({ success: false, message: "ID is required" });
         return;
       }
-      const data = await BikesService.update(id as string, req.body);
+      const data = await BikesService.update(id as string, req.body, (req as any).user);
       res.json({ success: true, message: "Updated successfully", data });
     } catch (error) {
       next(error);
@@ -51,7 +51,7 @@ export const controller = {
         res.status(400).json({ success: false, message: "ID is required" });
         return;
       }
-      const data = await BikesService.delete(id as string);
+      const data = await BikesService.delete(id as string, (req as any).user);
       res.json({ success: true, message: "Deleted successfully", data });
     } catch (error) {
       next(error);
