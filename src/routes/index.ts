@@ -33,9 +33,14 @@ const routesInit = (app: Express) => {
 
   // Register all module routes
   routes.forEach((route) => {
-    const { method, path, controller, authorization, authCheckType, permissions } = route;
+    const { method, path, controller, authorization, authCheckType, permissions, rateLimit } = route;
 
     const middlewares: any[] = [];
+
+    // Add per-route rate limiter if specified
+    if (rateLimit) {
+      middlewares.push(rateLimit);
+    }
 
     // Add authentication middleware if route requires authorization
     if (authorization) {

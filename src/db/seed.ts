@@ -35,19 +35,19 @@ async function seed() {
       ],
     },
   ])
-  .onConflictDoNothing()
-  .returning();
-  
+    .onConflictDoNothing()
+    .returning();
+
   // If roles were already inserted, we need to fetch them
   let allRoles = roles;
   if (roles.length === 0) {
     allRoles = await db.select().from(rolesSchema);
   }
-  
+
   const superAdminRole = allRoles.find(r => r.name === "SUPER_ADMIN");
 
   // 2. Seed the first Super Admin User
-  const hashedPassword = await hashPassword("admin@123"); 
+  const hashedPassword = await hashPassword("admin@123");
   await db.insert(usersSchema).values({
     name: "System Admin",
     email: "admin@gmail.com",

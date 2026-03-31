@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction, RequestHandler } from "express";
 
 export interface IRoute {
   method: "get" | "post" | "put" | "delete" | "patch";
@@ -7,6 +7,7 @@ export interface IRoute {
   authorization?: boolean;
   authCheckType?: string[];
   permissions?: string[];
+  rateLimit?: RequestHandler; // Optional per-route rate limiter
 }
 
 export interface IParams {
