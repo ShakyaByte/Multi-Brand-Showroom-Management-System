@@ -1,11 +1,19 @@
 import type { IRoute } from "../../interface";
 import { controller } from "./controller";
+import { upload } from "../../utils/multer";
+
+// Define once, reuse everywhere
+const documentUpload = upload.fields([
+  { name: "documentFront", maxCount: 1 },
+  { name: "documentBack", maxCount: 1 },
+]);
 
 const routes: IRoute[] = [
   {
     method: "post",
     path: "users",
     controller: controller.create,
+    middlewares: [documentUpload],
     authorization: true,
     authCheckType: ["SUPER_ADMIN"],
   },
@@ -15,6 +23,7 @@ const routes: IRoute[] = [
     controller: controller.list,
     authorization: true,
     authCheckType: ["SUPER_ADMIN"],
+    middlewares: [documentUpload],
   },
   {
     method: "get",
@@ -22,11 +31,13 @@ const routes: IRoute[] = [
     controller: controller.find,
     authorization: true,
     authCheckType: ["SUPER_ADMIN"],
+    middlewares: [documentUpload],
   },
   {
     method: "patch",
     path: "users/:id",
     controller: controller.update,
+    middlewares: [documentUpload],  // reuse same instance
     authorization: true,
     authCheckType: ["SUPER_ADMIN"],
   },

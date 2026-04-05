@@ -54,6 +54,10 @@ async function seed() {
     password: hashedPassword,
     roleId: superAdminRole!.id, // Link to SUPER_ADMIN role
     // brandId and showroomId are left null because Super Admin manages everything
+    documentType: "Citizenship",
+    documentNumber: "123456789",
+    documentFront: "path/to/front.jpg",
+    documentBack: "path/to/back.jpg"
   }).onConflictDoNothing();
 
   console.log("Seeding complete!");

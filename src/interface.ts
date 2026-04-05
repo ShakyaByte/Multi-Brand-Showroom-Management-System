@@ -8,6 +8,7 @@ export interface IRoute {
   authCheckType?: string[];
   permissions?: string[];
   rateLimit?: RequestHandler; // Optional per-route rate limiter
+  middlewares?: RequestHandler[]; // Optional route-specific middlewares
 }
 
 export interface IParams {

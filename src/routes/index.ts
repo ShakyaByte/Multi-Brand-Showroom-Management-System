@@ -31,28 +31,40 @@ const routesInit = (app: Express) => {
     });
   });
 
-  // Register all module routes
   routes.forEach((route) => {
-    const { method, path, controller, authorization, authCheckType, permissions, rateLimit } = route;
+    const {
+      method,
+      path,
+      controller,
+      authorization,
+      authCheckType,
+      permissions,
+      rateLimit,
+      middlewares: routeMiddlewares,
+    } = route;
 
     const middlewares: any[] = [];
 
-    // Add per-route rate limiter if specified
+    // 1. Rate limiter first (protects even unauthenticated endpoints)
     if (rateLimit) {
       middlewares.push(rateLimit);
     }
 
-    // Add authentication middleware if route requires authorization
+    // 2. Authentication BEFORE file uploads (don't accept files from strangers)
     if (authorization) {
       middlewares.push(checkAuthentication(authCheckType, permissions));
+    }
+
+    // 3. Route-specific middlewares like multer AFTER auth
+    if (routeMiddlewares && routeMiddlewares.length > 0) {
+      middlewares.push(...routeMiddlewares);
     }
 
     app[method](`/api/${path}`, ...middlewares, controller);
   });
 
-  // Global error handler (must be registered AFTER all routes)
+  // Global error handler (must be last)
   app.use(errorHandler);
 };
 
 export default routesInit;
-
