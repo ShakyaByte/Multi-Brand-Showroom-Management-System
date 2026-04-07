@@ -14,7 +14,10 @@ const env: any = {
   SMTP_PORT: process.env.SMTP_PORT ,
   SMTP_USER: process.env.SMTP_USER ,
   SMTP_PASS: process.env.SMTP_PASS ,
-  SMTP_FROM: process.env.SMTP_FROM ,
+  SMTP_FROM: process.env.SMTP_FROM,
+  REDIS_HOST: process.env.REDIS_HOST || '127.0.0.1',
+  REDIS_PORT: parseInt(process.env.REDIS_PORT || '6379', 10),
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD || '',
 };
 
 export default env;
